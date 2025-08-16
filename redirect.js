@@ -1,24 +1,65 @@
+// redirect.js
 document.addEventListener("DOMContentLoaded", function() {
-  const params = new URLSearchParams(window.location.search);
-  const auth = params.get("auth");
-  const admin = params.get("admin");
+    // Create overlay notice dynamically
+    const overlay = document.createElement('div');
+    overlay.id = 'redirectNotice';
+    overlay.style = `
+        position: fixed;
+        top:0; left:0; right:0; bottom:0;
+        background: rgba(0,0,0,0.85);
+        color: #00ffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        z-index: 9999;
+    `;
+    overlay.innerHTML = `
+        Redirecting...
+        <div style="
+            margin-top: 20px;
+            border: 4px solid #fff;
+            border-top: 4px solid #00f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        "></div>
+    `;
+    document.body.appendChild(overlay);
 
-  // All redirect rules in one object
-  const redirectMap = {
-    auth: {
-      "TopFont": "https://pixlefy.blogspot.com/2025/08/6716996008.html",
-      "Top10Font": "https://pixlefy.blogspot.com/2025/08/blog-post_14.html",
-      "Courses": "https://pixlefy.blogspot.com/search/Label/Courses"
-    },
-    admin: {
-      "Anika": "https://pixlefy.blogspot.com/p/anika.html"
+    // Add spin animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    `;
+    document.head.appendChild(style);
+
+    // URL params and redirects
+    const params = new URLSearchParams(window.location.search);
+    const auth = params.get("auth");
+    const admin = params.get("admin");
+
+    const redirectMap = {
+        auth: {
+            "TopFont": "https://pixlefy.blogspot.com/2025/08/6716996008.html",
+            "Top10Font": "https://pixlefy.blogspot.com/2025/08/blog-post_14.html",
+            "Courses": "https://pixlefy.blogspot.com/search/Label/Courses"
+        },
+        admin: {
+            "Anika": "https://pixlefy.blogspot.com/p/anika.html"
+        }
+    };
+
+    let targetURL = null;
+    if (auth && redirectMap.auth[auth]) targetURL = redirectMap.auth[auth];
+    else if (admin && redirectMap.admin[admin]) targetURL = redirectMap.admin[admin];
+
+    if (targetURL) {
+        setTimeout(() => { window.location.href = targetURL; }, 1500);
+    } else {
+        overlay.innerText = "No redirect found!";
     }
-  };
-
-  // Check and redirect
-  if (auth && redirectMap.auth[auth]) {
-    window.location.href = redirectMap.auth[auth];
-  } else if (admin && redirectMap.admin[admin]) {
-    window.location.href = redirectMap.admin[admin];
-  }
 });
