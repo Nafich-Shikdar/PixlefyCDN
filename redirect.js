@@ -1,10 +1,9 @@
-// redirect.js
 document.addEventListener("DOMContentLoaded", function() {
 
     // Create overlay
     const overlay = document.createElement('div');
     overlay.id = 'redirectNotice';
-    overlay.style = `
+    overlay.style.cssText = `
         position: fixed;
         top:0; left:0; right:0; bottom:0;
         background: rgba(0,0,0,0.9);
@@ -17,28 +16,31 @@ document.addEventListener("DOMContentLoaded", function() {
         color: #0ff;
         text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
         z-index: 9999;
-        animation: flicker 1.5s infinite alternate;
+        text-align: center;
     `;
     overlay.innerHTML = `
         ⬤ Redirecting...
-        <div style="
+        <div id="loader" style="
             margin-top: 20px;
-            border: 4px solid #0ff;
-            border-top: 4px solid #ff00ff;
+            border: 5px solid #0ff;
+            border-top: 5px solid #ff00ff;
             border-radius: 50%;
             width: 50px;
             height: 50px;
-            animation: spin 1s linear infinite;
-            box-shadow: 0 0 20px #0ff, 0 0 30px #ff00ff;
         "></div>
     `;
     document.body.appendChild(overlay);
 
-    // Add animations
+    // Add animations dynamically
     const style = document.createElement('style');
     style.innerHTML = `
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #loader {
+      animation: spin 1s linear infinite;
+    }
     `;
     document.head.appendChild(style);
 
