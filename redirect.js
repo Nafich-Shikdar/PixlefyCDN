@@ -1,43 +1,48 @@
 // redirect.js
 document.addEventListener("DOMContentLoaded", function() {
-    // Create overlay notice dynamically
+
+    // Create overlay
     const overlay = document.createElement('div');
     overlay.id = 'redirectNotice';
     overlay.style = `
         position: fixed;
         top:0; left:0; right:0; bottom:0;
-        background: rgba(0,0,0,0.85);
-        color: #00ffff;
+        background: rgba(0,0,0,0.9);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        font-family: Arial, sans-serif;
-        font-size: 24px;
+        font-family: 'Courier New', monospace;
+        font-size: 28px;
+        color: #0ff;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
         z-index: 9999;
+        animation: flicker 1.5s infinite alternate;
     `;
     overlay.innerHTML = `
-        Redirecting...
+        ⬤ Redirecting...
         <div style="
             margin-top: 20px;
-            border: 4px solid #fff;
-            border-top: 4px solid #00f;
+            border: 4px solid #0ff;
+            border-top: 4px solid #ff00ff;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px #0ff, 0 0 30px #ff00ff;
         "></div>
     `;
     document.body.appendChild(overlay);
 
-    // Add spin animation
+    // Add animations
     const style = document.createElement('style');
     style.innerHTML = `
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
     `;
     document.head.appendChild(style);
 
-    // URL params and redirects
+    // URL params
     const params = new URLSearchParams(window.location.search);
     const auth = params.get("auth");
     const admin = params.get("admin");
@@ -60,6 +65,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (targetURL) {
         setTimeout(() => { window.location.href = targetURL; }, 1500);
     } else {
-        overlay.innerText = "No redirect found!";
+        overlay.innerText = "⚠ No redirect found!";
     }
 });
